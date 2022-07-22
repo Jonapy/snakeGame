@@ -4,9 +4,10 @@ let ctx = canvas.getContext("2d");
 let x = canvas.width/2;
 let y = canvas.height - 30;
 let ballRadius = 10;
+let dist = 0.5;
 let rightBound = canvas.width - ballRadius;
 let lowBound = canvas.height - ballRadius;
-let direction = "up";
+let direction = moveUp;
 
 function drawBall() {
     ctx.beginPath();
@@ -20,34 +21,41 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     // put a function that adds to the right direction
-    move();
+    direction();
 }
 
-function move () {
-    
+function moveRight(){
+    x += dist; 
+}
 
+function moveLeft(){
+    x -= dist;
+}
+
+function moveUp(){
+    y -= dist;
+}
+
+function moveDown(){
+    y += dist;
 }
 
 function changeDirection(e) {
     if(e.key == "ArrowRight" && x < rightBound) {
         // move right
-        direction = "right"
-        // x += ballRadius;   
+        direction = moveRight; 
     }
     if(e.key == "ArrowLeft" && x > ballRadius ) {
         // move left
-        direction = "left"
-        // x -= ballRadius;
+        direction = moveLeft;
     }
     if(e.key == "ArrowUp" && y > ballRadius) {
         // move up
-        direction = "up"
-        // y -= ballRadius;
+        direction = moveUp;
     }
     if( e.key == "ArrowDown" && y < lowBound ) {
         // move down
-        direction = "down"
-        // y += ballRadius;
+        direction = moveDown;
     }
 }
 
