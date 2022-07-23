@@ -1,5 +1,5 @@
 document.addEventListener( "keydown", changeDirection, false );
-setInterval( draw, 10 );
+setInterval( draw, 50 );
 
 class Queue {
   constructor( ) {
@@ -31,18 +31,25 @@ class Queue {
 let canvas = document.getElementById( "myCanvas" );
 let ctx = canvas.getContext( "2d") ;
 
-let x = canvas.width / 2;
-let y = canvas.height - 30;
+let x = canvas.width/2;
+let y = canvas.height/2;
 
 let ballRadius = 10;
-let dist = 0.5;
+let dist = 1;
 
 let rightBound = canvas.width - ballRadius;
 let lowBound = canvas.height - ballRadius;
 
 let direction = moveUp;
 
-let map = ( new Array( 480 ) ).fill( ( new Array( 320 ) ).fill( 0 ) );	// 2D array representing the map with 0's
+//let map = ( new Array( 480 ) ).fill( ( new Array( 320 ) ).fill( 0 ) );	// 2D array representing the map with 0's
+let map = [];
+for(let i = 0; i < 480;i++){
+  map[i] = [];
+  for(let j = 0; j < 320;j++){
+    map[i][j] = 0;
+  }
+}
 
 let snakeQ = new Queue( );
 
@@ -57,14 +64,15 @@ function drawBall( xCor, yCor, color ) {
 }
 
 function draw( ) {
-    // Make same size as ball
-    /*if ( snakeQ.length( ) >= 4 ) {
+     //Make same size as ball
+    if ( snakeQ.length( ) >= 4 ) {
         let tempList = snakeQ.dequeue( );
         map[ tempList[ 0 ] ][ tempList[ 1 ] ] = 0;
-        //ctx.clearRect( tempList[ 0 ], tempList[ 1 ], ballRadius * 4, ballRadius * 4 );
-    } */
+        ctx.clearRect( tempList[ 0 ], tempList[ 1 ], ballRadius * 2, ballRadius * 2 );
+    } 
 
-    //snakeQ.enqueue( [ x, y ] );
+    snakeQ.enqueue( [ x, y ] );
+    console.log(`map[${x}][${y}] = ${map[x][y]}`);
     map[ x ][ y ] = 2;
     drawBall( x, y, '0095DD' );
     // put a function that adds to the right direction
