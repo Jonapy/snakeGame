@@ -1,5 +1,5 @@
 document.addEventListener( "keydown", changeDirection, false );
-setInterval( draw, 50 );
+setInterval( draw, 500 );
 
 class Queue {
   constructor( ) {
@@ -35,7 +35,7 @@ let x = canvas.width/2;
 let y = canvas.height/2;
 
 let ballRadius = 10;
-let dist = 1;
+let dist = ballRadius * 2;
 
 let rightBound = canvas.width - ballRadius;
 let lowBound = canvas.height - ballRadius;
@@ -65,10 +65,10 @@ function drawBall( xCor, yCor, color ) {
 
 function draw( ) {
      //Make same size as ball
-    if ( snakeQ.length( ) >= 80 ) {
-        let tempList = snakeQ.dequeue( );
+    if ( snakeQ.length( ) >= 4 ) {
+          let tempList = snakeQ.dequeue( );
+          ctx.clearRect( tempList[ 0 ] - ballRadius, tempList[ 1 ] - ballRadius, ballRadius * 2, ballRadius * 2 );
         map[ tempList[ 0 ] ][ tempList[ 1 ] ] = 0;
-        ctx.clearRect( tempList[ 0 ] - ballRadius - 1, tempList[ 1 ] - ballRadius - 1, ballRadius * 2 + 2, ballRadius * 2 + 2 );
     }
 
     snakeQ.enqueue( [ x, y ] );
@@ -83,6 +83,7 @@ function findFood( ) {
     let foodX = Math.floor( Math.random( ) * x );
     let foodY = Math.floor( Math.random( ) * y );
     drawBall( foodX, foodY, '000000' );
+    console.log( "foodX" + foodX + "foodY" + foodY );
 
     map[ foodX ][ foodY ] = 1;
 }
