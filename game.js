@@ -53,11 +53,11 @@ for(let i = 0; i < 480;i++){
 
 let snakeQ = new Queue( );
 
-//findFood( );
+findFood( );
 
 function drawBall( xCor, yCor, color ) {
-    ctx.beginPath( );  
-    ctx.arc( xCor, yCor, ballRadius, 0, Math.PI*2 );  
+    ctx.beginPath( );
+    ctx.arc( xCor, yCor, ballRadius, 0, Math.PI*2 );
     ctx.fillStyle = color;
     ctx.fill( );
     ctx.closePath( );
@@ -65,11 +65,11 @@ function drawBall( xCor, yCor, color ) {
 
 function draw( ) {
      //Make same size as ball
-    if ( snakeQ.length( ) >= 4 ) {
+    if ( snakeQ.length( ) >= 80 ) {
         let tempList = snakeQ.dequeue( );
         map[ tempList[ 0 ] ][ tempList[ 1 ] ] = 0;
-        ctx.clearRect( tempList[ 0 ], tempList[ 1 ], ballRadius * 2, ballRadius * 2 );
-    } 
+        ctx.clearRect( tempList[ 0 ] - ballRadius - 1, tempList[ 1 ] - ballRadius - 1, ballRadius * 2 + 2, ballRadius * 2 + 2 );
+    }
 
     snakeQ.enqueue( [ x, y ] );
     console.log(`map[${x}][${y}] = ${map[x][y]}`);
@@ -81,14 +81,14 @@ function draw( ) {
 
 function findFood( ) {
     let foodX = Math.floor( Math.random( ) * x );
-    let foodY = Math.floor( Math.random( ) * y ); 
+    let foodY = Math.floor( Math.random( ) * y );
     drawBall( foodX, foodY, '000000' );
-    
+
     map[ foodX ][ foodY ] = 1;
 }
 
 function moveRight( ) {
-    x += dist; 
+    x += dist;
 }
 
 function moveLeft( ) {
@@ -107,14 +107,14 @@ function changeDirection( e ) {
     if( e.key == "ArrowRight" && x < rightBound ) {
         // move right
         direction = moveRight;
-        // check if we have touched the food ball 
+        // check if we have touched the food ball
     }
     if( e.key == "ArrowLeft" && x > ballRadius ) {
         // move left
         direction = moveLeft;
     }
     if( e.key == "ArrowUp" && y > ballRadius ) {
-        // move up 
+        // move up
         direction = moveUp;
     }
     if( e.key == "ArrowDown" && y < lowBound ) {
@@ -122,11 +122,3 @@ function changeDirection( e ) {
         direction = moveDown;
     }
 }
-
-
-
-
-
-
-
-
