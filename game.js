@@ -36,35 +36,67 @@ function drawBall( xCor, yCor, color ) {
 
 function snakeLogic( ) {
     if ( snakeQ.length( ) >= 4 ) {
+      // Dequeqing from the Queue ( Removing the snake's tail )
       let tempList = snakeQ.dequeue( );
+      // Removing the food ball from the canvas
       ctx.clearRect( tempList[ 0 ] - ballRadius, tempList[ 1 ] - ballRadius, ballRadius * 2, ballRadius * 2 );
+      // Erase ourselves from the map ( the tail ( 2 ) / no tail ( 0 ) )
       map[ tempList[ 0 ] ][ tempList[ 1 ] ] = 0;
     }
 
-    snakeQ.enqueue( [ x, y ] );
-    //console.log(`map[${x}][${y}] = ${map[x][y]}`);
-    console.log("coordinates:"+x+" "+y); //y = 320 is dead, x = 480
-    
-    drawBall( x, y, '0095DD' );
     // check game status
     if (!gameStatus()){
+      ctx.clearRect( 0, 0, canvas.width, canvas.height );
       ctx.strokeText("You lost!", canvas.height/2, canvas.height/2);
       ctx.strokeText("Play again?", canvas.height/2 , canvas.height/2 + canvas.height/4);
-      //window.location.reload();
+
+      return;
     }
+
+    // Check if the snake is intersecting the food
+    if ( findIntersectionFood( ) ) {
+      // If so create another random food spot
+      findFood( );
+      // Make the snake larger by enqueuing
+      snakeQ.enqueue( [ x, y ] );
+      // Draw the new piece of snake
+      drawBall( foodX, foodY, '000000' );
+      // Place the new snake on the map
+      map[ x ][ y ] = 2;
+    }
+
+    //console.log(`map[${x}][${y}] = ${map[x][y]}`);
+    console.log("coordinates:"+x+" "+y); //y = 320 is dead, x = 480
+
+    drawBall( x, y, '0095DD' );
+
+    snakeQ.enqueue( [ x, y ] );
+
     map[ x ][ y ] = 2;
     // put a function that adds to the right direction
     direction( );
 }
 
 function findFood( ) {
-    let foodX = Math.floor( Math.random( ) * x );
-    let foodY = Math.floor( Math.random( ) * y );
+    // Choose random coordinates to place the food
+    foodX = ( ( Math.floor( Math.random( ) * x ) * 10 ) % 460 ) + 10;
+    foodY = ( ( Math.floor( Math.random( ) * y ) * 10 ) % 300 ) + 10;
+
     drawBall( foodX, foodY, '000000' );
     console.log( "foodX" + foodX + "foodY" + foodY );
 
+    // Put food on the map
     map[ foodX ][ foodY ] = 1;
 }
+
+function findIntersectionFood( ) {
+  // If the map in that position was originally 1 and we are going to convert it to a 2, then we have intersected
+  if ( map[ foodX ][ foodY ] == 2 ) {
+    return true;
+  }
+  return false;
+}
+
 
 function moveRight( ) {
     x += dist;
@@ -105,7 +137,6 @@ function changeDirection( e ) {
 function gameStatus() {
   // if anything here is true, user lost
   if ( map[x][y] === 2 || x <= 0 || x >= 480 || y <= 0 || y >= 320 ) {
-    console.log("in");
     return false;
   }
   // user is still alive
@@ -124,6 +155,8 @@ let rightBound = canvas.width - ballRadius;
 let lowBound = canvas.height - ballRadius;
 let snakeQ = new Queue( );
 let direction = moveUp;
+let foodX;
+let foodY;
 
 //let map = ( new Array( 480 ) ).fill( ( new Array( 320 ) ).fill( 0 ) );	// 2D array representing the map with 0's
 let map = [];

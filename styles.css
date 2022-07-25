@@ -1,2 +1,10 @@
 * { padding: 0; margin: 0; }
 canvas { background: #eee; display: block; margin: 0 auto; }
+#scoreBoard {
+  background-color: black;
+  color: white;
+  padding: 0 0 5 5;
+}
+#Title {
+  text-align: center;
+}
